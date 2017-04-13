@@ -1,0 +1,16 @@
+{
+  "port": "3000",
+  "session": {
+    "key": "koa:sess",
+    "useRedis": true,
+    "server"  : {
+      "keyPrefix":"",
+      "host": "114.55.66.147",
+      "port": 6379,
+      "password": "test1231",
+      "family": 4,
+      "db"  : 9
+    }
+  },
+  "CDN": "/"
+}
