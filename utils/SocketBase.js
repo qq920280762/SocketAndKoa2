@@ -1,5 +1,5 @@
 'use strict';
-class socketUtils {
+class SocketBase {
 
     constructor(io){
         this.io = io;
@@ -61,4 +61,4 @@ class socketUtils {
 
 
 }
-module.exports = socketUtils;
+module.exports = SocketBase;

@@ -58,7 +58,7 @@
 
 
 let randomNames = require('./utils/randomNames');
-let socketUtils = require('./utils/socketUtils');
+let socketUtils = require('./utils/SocketBase');
 
 class socket_server extends socketUtils {
 
