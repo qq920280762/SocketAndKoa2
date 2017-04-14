@@ -1,56 +1,105 @@
 'use strict';
-let randomNames = require('./utils/randomNames');
+
 /**
-        //加入manager分组
-        socket.on('group1', function () {
-            socket.join('group1');
-            //包括自己
-            io.sockets.in('group1').emit('msgReceived',  ' Welcome '+socket.id+' to join group1');
-            //不包括自己
-            socket.broadcast.to('group1').emit('msgReceived', ' Welcome '+socket.id+' to join group1');
-            //获取所有房间（分组）信息,返回{socket_id:true,...}
-            io.sockets.adapter.rooms
-            //获取group1中的客户端，返回{socket_id:true,...}
-            io.sockets.adapter.rooms('group1');
-            //移除房间
-            socket.leave('group1');
-        });
+
+// 加入manager分组
+// socket.on('group1', function () {
+//            socket.join('group1');
+//            //包括自己
+//            io.sockets.in('group1').emit('msgReceived',  ' Welcome '+socket.id+' to join group1');
+//            //不包括自己
+//            socket.broadcast.to('group1').emit('msgReceived', ' Welcome '+socket.id+' to join group1');
+//            //获取所有房间（分组）信息,返回{socket_id:true,...}
+//            io.sockets.adapter.rooms
+//            //获取group1中的客户端，返回{socket_id:true,...}
+//            io.sockets.adapter.rooms('group1');
+//            //移除房间
+//            socket.leave('group1');
+//   });
+
+// exports.start = function(server){
+//
+//    var io  = require('socket.io')(server);
+//
+//    io.on('connection', function(socket) {
+//
+//        socket.name = randomNames.getRandomName(2);
+//
+//        console.log('soket connection [ '+socket.id+' ] ');
+//
+//        //加入employee分组
+//        socket.on('roomJoin',function(data){
+//            socket.join(data.id);
+//            socket.emit('msgReceived', ' [ '+socket.name+' ] => JOIN ROOM '+data.id);
+//            socket.broadcast.to(data.id).emit('msgReceived', ' [ '+socket.name+' ] => JOIN ROOM '+data.id);
+//        });
+//
+//        socket.on('roomLeave',function(data){
+//            socket.leave(data.id);
+//            socket.emit('msgReceived', ' [ '+socket.name+' ] => LEAVE ROOM '+data.id);
+//            socket.broadcast.to(data.id).emit('msgReceived', ' [ '+socket.name+' ] => LEAVE ROOM '+data.id);
+//        });
+//
+//        socket.on('roomChat',function(data){
+//            socket.emit('msgReceived',' [ '+socket.name+' ] => '+ data.msg);
+//            socket.broadcast.to(data.id).emit('msgReceived',' [ '+socket.name+' ] => '+ data.msg);
+//        });
+//
+//        //客户端断开事件
+//        socket.on('disconnect', function () {
+//            console.log('client active disconnect  [  '+socket.id+' ]');
+//            socket.disconnect();
+//        });
+//
+//    });
+// }
 
  */
 
-exports.start = function(server){
 
-    var io  = require('socket.io')(server);
+let randomNames = require('./utils/randomNames');
+let socketUtils = require('./utils/socketUtils');
 
-    io.on('connection', function(socket) {
+class socket_server extends socketUtils {
 
-        socket.name = randomNames.getRandomName(2);
+    constructor(server){
+        super(require('socket.io')(server));
+    }
 
-        console.log('soket connection [ '+socket.id+' ] ');
+    init(){
+        this.io.on('connection', (socket) => {
 
-        /* 加入employee分组 */
-        socket.on('roomJoin',function(data){
-            socket.join(data.id);
-            socket.emit('msgReceived', ' [ '+socket.name+' ] => JOIN ROOM '+data.id);
-            socket.broadcast.to(data.id).emit('msgReceived', ' [ '+socket.name+' ] => JOIN ROOM '+data.id);
+            socket.name = randomNames.getRandomName(2);
+
+            console.log('soket connection [ '+socket.id+' ] ');
+
+            // 加入employee分组
+            socket.on('roomJoin',(data)=>{
+                if(!this.hasUserAtRoom(data.id,socket.id)){
+                    this.joinRoom(data.id,socket.id);
+                    this.emitRoom(data.id,' [ '+socket.name+' ] => JOIN ROOM '+data.id ,'msgReceived');
+                }else{
+                    this.emitSocket(socket.id,' [ '+socket.name+' ] => Repeat to join the room '+data.id,'msgReceived');
+                }
+            });
+
+            socket.on('roomLeave',(data)=>{
+                this.leaveRoom(data.id,socket.id);
+                this.emitRoom(data.id, ' [ '+socket.name+' ] => LEAVE ROOM '+data.id,'msgReceived');
+            });
+
+            socket.on('roomChat',(data)=>{
+                this.emitRoom(data.id,' [ '+socket.name+' ] => '+ data.msg,'msgReceived');
+            });
+
+            //客户端断开事件
+            socket.on('disconnect',  () => {
+                console.log('client active disconnect  [  '+socket.id+' ]');
+                socket.disconnect();
+            });
+
         });
+    }
 
-        socket.on('roomLeave',function(data){
-            socket.leave(data.id);
-            socket.emit('msgReceived', ' [ '+socket.name+' ] => LEAVE ROOM '+data.id);
-            socket.broadcast.to(data.id).emit('msgReceived', ' [ '+socket.name+' ] => LEAVE ROOM '+data.id);
-        });
-
-        socket.on('roomChat',function(data){
-            socket.emit('msgReceived',' [ '+socket.name+' ] => '+ data.msg);
-            socket.broadcast.to(data.id).emit('msgReceived',' [ '+socket.name+' ] => '+ data.msg);
-        });
-
-        /* 客户端断开事件 */
-        socket.on('disconnect', function () {
-            console.log('client active disconnect  [  '+socket.id+' ]');
-            socket.disconnect();
-        });
-
-    });
 }
+module.exports = socket_server;
