@@ -36,8 +36,13 @@ $('#close').click(function(){
     socket.disconnect();
 });
 $('#send').click(function(){
+    if(!$('#msg').val().toString().trim()){
+        alert('Send content cannot be empty ~');
+        return;
+    };
     var data = {id:$('#room').val(),msg:$('#msg').val()};
     socket.emit('roomChat',data);
+    $('#msg').val('');
 });
 
 $('#join-room').click(function(){
@@ -53,3 +58,11 @@ $('#leave-room').click(function(){
 $('#clear').click(function(){
     $('#receive').empty();
 });
+
+document.onkeydown=function(event){
+    var e = event || window.event || arguments.callee.caller.arguments[0];
+    if(e && e.keyCode==13){
+
+        $('#send').click();
+    }
+};
