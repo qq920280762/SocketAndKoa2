@@ -67,14 +67,11 @@ class socket_server extends socketUtils {
     }
 
     init(){
-        this.io.on('connection', (socket) => {
-
+        this.connect( (socket) => {
             socket.name = randomNames.getRandomName(2);
-
             console.log('soket connection [ '+socket.id+' ] ');
-
             // 加入employee分组
-            socket.on('roomJoin',(data)=>{
+            this.listenEvent('roomJoin',socket.id,(data)=>{
                 if(!this.hasUserAtRoom(data.id,socket.id)){
                     this.joinRoom(data.id,socket.id);
                     this.emitRoom(data.id,' [ '+socket.name+' ] => JOIN ROOM '+data.id ,'msgReceived');
@@ -83,19 +80,19 @@ class socket_server extends socketUtils {
                 }
             });
 
-            socket.on('roomLeave',(data)=>{
+            this.listenEvent('roomLeave',socket.id,(data)=>{
                 this.leaveRoom(data.id,socket.id);
                 this.emitRoom(data.id, ' [ '+socket.name+' ] => LEAVE ROOM '+data.id,'msgReceived');
             });
 
-            socket.on('roomChat',(data)=>{
+            this.listenEvent('roomChat',socket.id,(data)=>{
                 this.emitRoom(data.id,' [ '+socket.name+' ] => '+ data.msg,'msgReceived');
             });
 
             //客户端断开事件
-            socket.on('disconnect',  () => {
+            this.listenEvent('disconnect',socket.id,() => {
                 console.log('client active disconnect  [  '+socket.id+' ]');
-                socket.disconnect();
+                this.disconnect(socket.id);
             });
 
         });

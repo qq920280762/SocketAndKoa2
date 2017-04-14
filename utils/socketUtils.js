@@ -5,6 +5,15 @@ class socketUtils {
         this.io = io;
     };
 
+
+    connect(fn){
+        this.io.on('connection',fn);
+    };
+
+    listenEvent(event,socketId,fn){
+        this.io.sockets.sockets[socketId].on(event,fn);
+    };
+
     joinRoom(roomId,socketId){
         this.io.sockets.sockets[socketId].join(roomId);
     };
@@ -44,6 +53,10 @@ class socketUtils {
             }
         }
         return flag;
+    };
+
+    disconnect(socketId){
+        this.io.sockets.sockets[socketId].disconnect();
     };
 
 
