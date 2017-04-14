@@ -47,8 +47,7 @@ class socket_server extends socketUtils {
                 this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => ' + data.msg, data.id);
 
             });
-
-            //客户端断开事件
+            
             this.on('disconnect', socket.id, () => {
 
                 console.log('client active disconnect  [  ' + socket.id + ' ]');
