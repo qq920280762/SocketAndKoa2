@@ -10,41 +10,49 @@ class SocketBase {
         this.io.on('connection',fn);
     };
 
-    listenEvent(event,socketId,fn){
-        this.io.sockets.sockets[socketId].on(event,fn);
+    on(event,socketId,fn){
+        let socket = this.io.sockets.sockets[socketId];
+        if(event && socket){
+            socket.on(event,fn);
+        }
     };
 
-    joinRoom(roomId,socketId){
-        this.io.sockets.sockets[socketId].join(roomId);
+    join(roomId,socketId){
+        let socket = this.io.sockets.sockets[socketId];
+        if(roomId && socket){
+           socket.join(roomId);
+        }
     };
 
-    leaveRoom(roomId,socketId){
-        this.io.sockets.sockets[socketId].leave(roomId);
+    leave(roomId,socketId){
+        let socket = this.io.sockets.sockets[socketId];
+        if(roomId && socket){
+            socket.leave(roomId);
+        }
     };
 
-    emitRoom(roomId,data,event='receiveMsg'){
+    broadcast(event,data,roomId){
         if(roomId){
-
             this.io.to(roomId).emit(event,data);
-
         }else{
-
             this.io.sockets.emit(event,data);
         }
     };
 
-    emitSocket(socketId,data,event='receiveMsg'){
-
-        this.io.sockets.sockets[socketId].emit(event,data);
+    emit(event,data,socketId){
+        let socket = this.io.sockets.sockets[socketId];
+        if(socket){
+            socket.emit(event,data);
+        }
 
     };
 
-    getUsersByRoom(room){
-        return this.io.sockets.adapter.rooms[room];
+    getSockets(room){
+        return room?this.io.sockets.adapter.rooms[room]:this.io.sockets.adapter.rooms;
     };
 
-    hasUserAtRoom(room,socketId){
-        let rooms = (this.getUsersByRoom(room)||{}).sockets||{};
+    hasSocket(room,socketId){
+        let rooms = (this.getSockets(room)||{}).sockets||{};
         let flag = false;
         for( let key in rooms){
             if(socketId==key && !!rooms[key]){
@@ -56,7 +64,10 @@ class SocketBase {
     };
 
     disconnect(socketId){
-        this.io.sockets.sockets[socketId].disconnect();
+        let socket = this.io.sockets.sockets[socketId];
+        if(socket){
+            socket.disconnect();
+        }
     };
 
 

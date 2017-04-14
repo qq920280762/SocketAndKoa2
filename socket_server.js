@@ -71,26 +71,26 @@ class socket_server extends socketUtils {
             socket.name = randomNames.getRandomName(2);
             console.log('soket connection [ '+socket.id+' ] ');
             // 加入employee分组
-            this.listenEvent('roomJoin',socket.id,(data)=>{
-                if(!this.hasUserAtRoom(data.id,socket.id)){
-                    this.joinRoom(data.id,socket.id);
-                    this.emitRoom(data.id,' [ '+socket.name+' ] => JOIN ROOM '+data.id ,'msgReceived');
+            this.on('roomJoin',socket.id,(data)=>{
+                if(!this.hasSocket(data.id,socket.id)){
+                    this.join(data.id,socket.id);
+                    this.broadcast('msgReceived',' [ '+socket.name+' ] => JOIN ROOM '+data.id ,data.id);
                 }else{
-                    this.emitSocket(socket.id,' [ '+socket.name+' ] => Repeat to join the room '+data.id,'msgReceived');
+                    this.emit('msgReceived',' [ '+socket.name+' ] => Repeat to join the room '+data.id,socket.id);
                 }
             });
 
-            this.listenEvent('roomLeave',socket.id,(data)=>{
-                this.leaveRoom(data.id,socket.id);
-                this.emitRoom(data.id, ' [ '+socket.name+' ] => LEAVE ROOM '+data.id,'msgReceived');
+            this.on('roomLeave',socket.id,(data)=>{
+                this.leave(data.id,socket.id);
+                this.broadcast('msgReceived', ' [ '+socket.name+' ] => LEAVE ROOM '+data.id,data.id);
             });
 
-            this.listenEvent('roomChat',socket.id,(data)=>{
-                this.emitRoom(data.id,' [ '+socket.name+' ] => '+ data.msg,'msgReceived');
+            this.on('roomChat',socket.id,(data)=>{
+                this.broadcast('msgReceived',' [ '+socket.name+' ] => '+ data.msg,data.id);
             });
 
             //客户端断开事件
-            this.listenEvent('disconnect',socket.id,() => {
+            this.on('disconnect',socket.id,() => {
                 console.log('client active disconnect  [  '+socket.id+' ]');
                 this.disconnect(socket.id);
             });
