@@ -7,7 +7,7 @@ socket.on('msgReceived', function (msg) {
 
 /* 连接事件 */
 socket.on('connect', function () {
-    $('#receive').append('socket connect : [ '+socket.id+' ] \r\n');
+    $('#receive').append('[ '+socket.id+' ] connect to the server ~ \r\n');
 });
 
 /* 连接错误事件 */
