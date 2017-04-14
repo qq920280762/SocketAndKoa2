@@ -20,15 +20,15 @@ class socket_server extends socketUtils {
 
             this.on('roomJoin', socket.id, (data)=> {
 
-                if (!this.hasSocket(data.id, socket.id)) {
+                if (!this.hasSocket(data.roomId, socket.id)) {
 
-                    this.join(data.id, socket.id);
+                    this.join(data.roomId, socket.id);
 
-                    this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => JOIN ROOM ' + data.id, data.id);
+                    this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => JOIN ROOM ' + data.roomId, data.roomId);
                 }
                 else {
 
-                    this.emit('msgReceived', ' [ ' + socket.name + ' ] => Repeat to join the room ' + data.id, socket.id);
+                    this.emit('msgReceived', ' [ ' + socket.name + ' ] => Repeat to join the room ' + data.roomId, socket.id);
 
                 }
 
@@ -36,15 +36,15 @@ class socket_server extends socketUtils {
 
             this.on('roomLeave', socket.id, (data)=> {
 
-                this.leave(data.id, socket.id);
+                this.leave(data.roomId, socket.id);
 
-                this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => LEAVE ROOM ' + data.id, data.id);
+                this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => LEAVE ROOM ' + data.roomId, data.roomId);
 
             });
 
             this.on('roomChat', socket.id, (data)=> {
 
-                this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => ' + data.msg, data.id);
+                this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => ' + data.msg, data.roomId);
 
             });
             

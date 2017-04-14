@@ -40,18 +40,18 @@ $('#send').click(function(){
         alert('Send content cannot be empty ~');
         return;
     };
-    var data = {id:$('#room').val(),msg:$('#msg').val()};
+    var data = {roomId:$('#room').val(),msg:$('#msg').val()};
     socket.emit('roomChat',data);
     $('#msg').val('');
 });
 
 $('#join-room').click(function(){
-    var data = {id:$('#room').val(),msg:$('#msg').val()};
+    var data = {roomId:$('#room').val(),msg:$('#msg').val()};
     socket.emit('roomJoin',data);
 });
 
 $('#leave-room').click(function(){
-    var data = {id:$('#room').val(),msg:$('#msg').val()};
+    var data = {roomId:$('#room').val(),msg:$('#msg').val()};
     socket.emit('roomLeave',data);
 });
 
