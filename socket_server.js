@@ -1,5 +1,5 @@
 'use strict';
-
+let randomNames = require('./utils/randomNames');
 /**
         //加入manager分组
         socket.on('group1', function () {
@@ -24,24 +24,26 @@ exports.start = function(server){
 
     io.on('connection', function(socket) {
 
+        socket.name = randomNames.getRandomName(2);
+
         console.log('soket connection [ '+socket.id+' ] ');
 
         /* 加入employee分组 */
         socket.on('roomJoin',function(data){
             socket.join(data.id);
-            socket.emit('msgReceived', ' [ '+socket.id+' ] => JOIN ROOM '+data.id);
-            socket.broadcast.to(data.id).emit('msgReceived', ' [ '+socket.id+' ] => JOIN ROOM '+data.id);
+            socket.emit('msgReceived', ' [ '+socket.name+' ] => JOIN ROOM '+data.id);
+            socket.broadcast.to(data.id).emit('msgReceived', ' [ '+socket.name+' ] => JOIN ROOM '+data.id);
         });
 
         socket.on('roomLeave',function(data){
             socket.leave(data.id);
-            socket.emit('msgReceived', ' [ '+socket.id+' ] => LEAVE ROOM '+data.id);
-            socket.broadcast.to(data.id).emit('msgReceived', ' [ '+socket.id+' ] => LEAVE ROOM '+data.id);
+            socket.emit('msgReceived', ' [ '+socket.name+' ] => LEAVE ROOM '+data.id);
+            socket.broadcast.to(data.id).emit('msgReceived', ' [ '+socket.name+' ] => LEAVE ROOM '+data.id);
         });
 
         socket.on('roomChat',function(data){
-            socket.emit('msgReceived',' [ '+socket.id+' ] => '+ data.msg);
-            socket.broadcast.to(data.id).emit('msgReceived',' [ '+socket.id+' ] => '+ data.msg);
+            socket.emit('msgReceived',' [ '+socket.name+' ] => '+ data.msg);
+            socket.broadcast.to(data.id).emit('msgReceived',' [ '+socket.name+' ] => '+ data.msg);
         });
 
         /* 客户端断开事件 */
