@@ -5,8 +5,7 @@
  */
 
 var app   = require('../http_server');
-var socket   = require('../SocketServer');
-var debug = require('debug')('SocketAndKoa2:server');
+var debug = require('debug')('SocketAndKoa2:http_server');
 var http  = require('http');
 var config  = require('../config');
 
@@ -14,7 +13,7 @@ var config  = require('../config');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || config.server.port || '3000');
+var port = normalizePort(process.env.PORT || config.server.http.port || '3000');
 
 /**
  * Create HTTP server.
@@ -26,16 +25,19 @@ var server = http.createServer(app.callback());
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port,config.server.hostname);
+server.listen(port,config.server.http.hostname);
+
 server.on('error', onError);
+
 server.on('listening', onListening);
 
-new socket(server).init();
+//绑定socket
+//new require('../SocketServer')(server).init();
 
 /**
  * Successful startup log printing
  */
-console.info('App started at port '+port);
+console.info('http_server started at '+config.server.http.hostname+':'+port);
 
 /**
  * init-data start

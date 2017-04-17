@@ -1,5 +1,5 @@
 
-$.get('/server/address',function(result){
+$.get('/socket/address',function(result){
 
     var socket = new io.connect(result,{'reconnect':false,'auto connect':false});
 

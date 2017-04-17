@@ -12,11 +12,12 @@ let get_index = async (ctx)=>{
     await ctx.render('index');
 };
 
-let get_server_address = async (ctx)=>{
-    ctx.body = 'http://'+config.server.hostname+':'+config.server.port;
+let get_socket_address = async (ctx)=>{
+    ctx.body = 'http://'+config.server.socket.hostname+':'+config.server.socket.port;
 };
 
-router.get('/server/address',get_server_address);
+router.get('/socket/address',get_socket_address);
 
 router.get('/',get_index);
+
 module.exports = router;
