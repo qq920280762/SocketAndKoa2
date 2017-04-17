@@ -5,7 +5,7 @@
  */
 
 var app   = require('../http_server');
-var socket   = require('../socket_server');
+var socket   = require('../SocketServer');
 var debug = require('debug')('SocketAndKoa2:server');
 var http  = require('http');
 var config  = require('../config');
@@ -21,7 +21,7 @@ var port = normalizePort(process.env.PORT || config.port || '3000');
  */
 
 var server = http.createServer(app.callback());
-//socket.start(server);
+
 new socket(server).init();
 
 

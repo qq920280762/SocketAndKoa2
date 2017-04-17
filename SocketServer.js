@@ -1,9 +1,9 @@
 'use strict';
 
 const randomNames = require('./utils/randomNames');
-const socketUtils = require('./utils/SocketBase');
+const SocketBase = require('./utils/SocketBase');
 
-class socket_server extends socketUtils {
+class SocketServer extends SocketBase {
 
     constructor(server) {
 
@@ -60,4 +60,4 @@ class socket_server extends socketUtils {
     }
 
 }
-module.exports = socket_server;
+module.exports = SocketServer;
