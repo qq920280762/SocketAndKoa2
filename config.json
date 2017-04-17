@@ -1,5 +1,8 @@
 {
-  "port": "3000",
+  "server": {
+    "port":"3000",
+    "hostname":"10.0.0.115"
+  },
   "session": {
     "key": "koa:sess",
     "useRedis": true,
