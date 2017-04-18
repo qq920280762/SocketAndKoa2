@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm install && (node --harmony ./bin/www_http & node --harmony ./bin/www_socket)",
-    "pm2":"npm install && pm2 startOrRestart ecosystem.config.js"
+    "pm2":"npm install && pm2 startOrRestart ecosystem.json"
   },
   "dependencies": {
     "ioredis": "^2.5.0",

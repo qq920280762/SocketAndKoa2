@@ -1,0 +1,40 @@
+{
+  "apps": [
+    {
+      "name": "http_server",
+      "max_memory_restart": "500M",
+      "script": "./bin/www_http",
+      "instances": 4,
+      "exec_mode": "cluster",
+      "watch": true,
+      "node_args": "--harmony",
+      "_comment": {
+        "out_file": "./logs/http/nova_out.log",
+        "error_file": "./logs/http/nova_error.log",
+        "env": {
+          "NODE_ENV": "production"
+        },
+        "watch_options": {
+          "usePolling": true
+        }
+      }
+    },
+    {
+      "name": "socket_server",
+      "max_memory_restart": "500M",
+      "script": "./bin/www_socket",
+      "watch": true,
+      "node_args": "--harmony",
+      "_comment": {
+        "out_file": "./logs/socket/nova_out.log",
+        "error_file": "./logs/socket/nova_error.log",
+        "env": {
+          "NODE_ENV": "production"
+        },
+        "watch_options": {
+          "usePolling": true
+        }
+      }
+    }
+  ]
+}
