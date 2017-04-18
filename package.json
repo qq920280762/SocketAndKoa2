@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www_http && node ./bin/www_socket",
+    "start": "npm install && (node --harmony ./bin/www_http & node --harmony ./bin/www_socket)",
     "pm2":"npm install && pm2 startOrRestart ecosystem.config.js"
   },
   "dependencies": {
