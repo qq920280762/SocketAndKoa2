@@ -34,10 +34,8 @@ class SocketServer extends SocketBase {
             console.log('soket connection [ ' + socket.id + ' ] ');
 
             this.on('message', socket.id, (data)=> {
-                console.log('message..'+data);
-            });
-            this.on('anything', socket.id, (data)=> {
-                console.log('anything..'+data);
+                console.log('message..'+data.msg);
+                socket.send(data.msg);
             });
 
             this.on('roomJoin', socket.id, (data)=> {

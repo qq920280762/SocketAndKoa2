@@ -11,13 +11,19 @@
 
 <body data-type="index" class="theme-black">
     <h1>{{title}}.{{SESSION.user}}</h1>
-    <input type="button" id="open" value="open"/>
-    <input type="button" id="close" value="close"/>
-    <span>房间号<input type="text" id="room" value="10086" /></span>
-    <input type="button" id="join-room" value="加入房间"/>
-    <input type="button" id="leave-room" value="离开房间"/>
-    <span>待发送内容<input type="text" id="msg" value="" /></span>
-    <input type="button" id="send" value="发送"/>
+    <div style="margin-top: 1em;">
+        <input type="button" id="open" value="open"/>
+        <input type="button" id="close" value="close"/>
+        <input type="button" id="message" value="message_event"/>
+    </div>
+    <div style="margin-top: 1em;">
+        <span>房间号<input type="text" id="room" value="10086" /></span>
+        <input type="button" id="join-room" value="加入房间"/>
+        <input type="button" id="leave-room" value="离开房间"/>
+    </div>
+    <div style="margin-top: 1em">待发送内容<input type="text" id="msg" value="" />
+        <input type="button" id="send" value="发送"/>
+    </div>
     <div style="max-width: 40em;margin:0;padding:0;"><h3>收到的内容</h3><textarea id="receive" style="width: 40em; height: 30em;margin:0;padding:0;"></textarea>
         <button id="clear" style="width: 40em;margin:0;padding:0;">clear</button>
     </div>

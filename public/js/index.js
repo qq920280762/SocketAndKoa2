@@ -79,6 +79,11 @@ $.get('/socket/address',function(result){
     $('#close').click(function(){
         socket.disconnect();
     });
+    $('#message').click(function(){
+        var data = {roomId:$('#room').val(),msg:'send message'};
+        socket.send(data);
+    });
+
     $('#send').click(function(){
         if(!$('#msg').val().toString().trim()){
             alert('Send content cannot be empty ~');
