@@ -29,7 +29,7 @@ class SocketServer extends SocketBase {
                 next(new Error('param error'));
             });
 
-            socket.name = randomNames.getRandomName(2);
+            socket.name = randomNames.getRandomName();
 
             console.log('soket connection [ ' + socket.id + ' ] ');
 
