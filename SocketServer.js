@@ -12,7 +12,7 @@ class SocketServer extends SocketBase {
     init() {
 
         this.io.set('heartbeat interval', 5*1000);//心跳间隔
-        this.io.set('heartbeat timeout', 5*1000);//心跳超时
+        this.io.set('heartbeat timeout',5*1000);//心跳超时
 
         this.io.use((socket,next)=>{
             //可以检查请求是否合法
@@ -24,6 +24,7 @@ class SocketServer extends SocketBase {
         this.connect((socket) => {
 
             socket.use((packet, next)=>{
+                console.log('lastPing=>'+socket.lastPing);
                 console.log('packet =>'+JSON.stringify(packet));
                 if (packet[1].roomId) return next();
                 next(new Error('param error'));
