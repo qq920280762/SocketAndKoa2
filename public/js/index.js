@@ -1,36 +1,77 @@
 
 $.get('/socket/address',function(result){
 
-    var socket = new io.connect(result,{'reconnect':false,'auto connect':false});
-
-    /* 自定义获取消息(msgReceived)事件 */
-    socket.on('msgReceived', function (msg) {
-        $('#receive').append(msg+'\r\n');
+    var socket = new io.connect(result,{
+        autoConnect:true,
+        timeout:5000,
+        reconnection:true,
+        reconnectionAttempts:3,
+        reconnectionDelay:1000,
+        reconnectionDelayMax:5000
     });
 
-    /* 连接事件 */
-    socket.on('connect', function () {
-        $('#receive').append('[ '+socket.id+' ] connect to the server ~ \r\n');
+
+    /* 正在连接 */
+    socket.on('connecting', function (obj) {
+        $('#receive').append('connecting : 正在连接... [ '+socket.id+' ] '+obj+' \r\n');
     });
 
-    /* 连接错误事件 */
-    socket.on('connect_error',function(object){
-        $('#receive').append(' connect_error :'+JSON.stringify(object)+'\r\n');
+    /* 连接成功 */
+    socket.on('connect', function (obj) {
+        $('#receive').append('connect: 连接成功! [ '+socket.id+' ] '+obj+'\r\n');
+    });
+
+    /* 连接异常事件 */
+    socket.on('connect_error',function(obj){
+        $('#receive').append(' connect_error :  连接异常! [ '+socket.id+' ] '+obj+' \r\n');
+    });
+
+    /* 正在重连 */
+    socket.on('reconnecting',function(obj){
+        $('#receive').append('reconnecting : 正在重连...[ '+socket.id+' ] '+obj+'\r\n');
+    });
+
+    /* 重连成功 */
+    socket.on('reconnect', function(obj) {
+        $('#receive').append('reconnect : 重连成功! [ '+socket.id+' ] '+obj+'\r\n');
+    });
+
+    /* 重连失败 */
+    socket.on('reconnect_failed',function(obj){
+        $('#receive').append('reconnect_failed : 重连失败! [ '+socket.id+' ] '+obj+' \r\n');
+    });
+
+
+    /* 不明异常 */
+    socket.on('error',function(obj){
+        $('#receive').append(' error : 不明异常! [ '+socket.id+' ] '+obj+'\r\n');
+    });
+
+
+
+
+
+    /* 同服务器端message事件 socket.send() 触发*/
+    socket.on('message', function (obj) {
+        $('#receive').append('message : [ '+socket.id+' ] '+obj+'\r\n');
+    });
+
+    /* 同服务器端anything事件 */
+    socket.on('anything', function (obj) {
+        $('#receive').append('anything : [ '+socket.id+' ] '+obj+'\r\n');
     });
 
     /* 服务器断开事件 */
-    socket.on('disconnect',function(){
-        $('#receive').append('server active disconnect ~ \r\n');
-        socket.disconnect();
-    })
-
-    /* 重新连接事件 大于三次就主动断开 */
-    socket.on('reconnecting',function(number){
-        if(number>3){
-            socket.disconnect();
-            $('#receive').append('reconnecting number gt 3 ~ \r\n');
-        }
+    socket.on('disconnect',function(obj){
+        $('#receive').append('disconnect : [ '+socket.id+' ] '+obj+' \r\n');
+        //socket.disconnect();
     });
+
+    /* 自定义获取消息(msgReceived)事件 */
+    socket.on('msgReceived', function (obj) {
+        $('#receive').append('msgReceived : '+obj+'\r\n');
+    });
+
 
     $('#open').click(function(){
         socket.connect();
