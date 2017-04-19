@@ -86,9 +86,9 @@ $.get('/socket/address',function(result){
 
     $('#send').click(function(){
         if(!$('#msg').val().toString().trim()){
-            alert('Send content cannot be empty ~');
+            $('#receive').append("Please don't send empty content! \r\n");
             return;
-        };
+        }
         var data = {roomId:$('#room').val(),msg:$('#msg').val()};
         socket.emit('roomChat',data);
         $('#msg').val('');
