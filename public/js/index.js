@@ -6,8 +6,8 @@ $.get('/socket/address',function(result){
         timeout:5000,
         reconnection:true,
         reconnectionAttempts:3,
-        reconnectionDelay:1000,
-        reconnectionDelayMax:5000
+        reconnectionDelay:1*1000,
+        reconnectionDelayMax:5*1000
     });
 
 
