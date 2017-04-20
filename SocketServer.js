@@ -12,22 +12,30 @@ class SocketServer extends SocketBase {
     init() {
 
         this.io.set('heartbeat interval', 5*1000);//心跳间隔
+        
         this.io.set('heartbeat timeout',5*1000);//心跳超时
 
         this.io.use((socket,next)=>{
-            //可以检查请求是否合法
+
             //console.log('headers =>' + JSON.stringify(socket.request.headers));
-            if (socket.request.headers.cookie) return next();
+
+            if (socket.request.headers.cookie)return next();
+
             next(new Error('Authentication error'));
+
         });
 
         this.connect((socket) => {
 
             socket.use((packet, next)=>{
                 try {
+
                     //console.log('packet =>'+JSON.stringify(packet));
+
                     if (packet[1].roomId) return next();
+
                     next(new Error('param error'));
+
                 }catch (e){
                     next(e);
                 }
@@ -38,7 +46,9 @@ class SocketServer extends SocketBase {
             console.log('soket connection ['+socket.id+'] [ ' +socket.name + ' ]');
 
             this.on('message', socket.id, (data)=> {
+
                 console.log('message..'+data.msg);
+
                 socket.send(data.msg);
             });
 
