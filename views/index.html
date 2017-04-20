@@ -10,25 +10,27 @@
 </head>
 
 <body data-type="index" class="theme-black">
-    <h1>{{title}}.{{SESSION.user}}</h1>
-    <div style="margin-top: 1em;">
-        <input type="button" id="open" value="open"/>
-        <input type="button" id="close" value="close"/>
-        <input type="button" id="message" value="message_event"/>
-    </div>
-    <div style="margin-top: 1em;">
-        <span>房间号<input type="text" id="room" value="10086" /></span>
-        <input type="button" id="join-room" value="加入房间"/>
-        <input type="button" id="leave-room" value="离开房间"/>
-    </div>
-    <div style="margin-top: 1em">待发送内容<input type="text" id="msg" value="" />
-        <input type="button" id="send" value="发送"/>
-    </div>
-    <div style="max-width: 40em;margin:0;padding:0;"><h3>延迟:<span id="delay">0</span>ms</h3><textarea id="receive" style="width: 40em; height: 30em;margin:0;padding:0;"></textarea>
-        <button id="clear" style="width: 40em;margin:0;padding:0;">clear</button>
-    </div>
+<h1>{{title}}.{{SESSION.user}}</h1>
+<div style="margin-top: 1em;">
+    <input type="button" id="open" value="open"/>
+    <input type="button" id="close" value="close"/>
+    <input type="button" id="message" value="message_event"/>
+</div>
+<div style="margin-top: 1em;">
+    <span>房间号<input type="text" id="room" value="10086"/></span>
+    <input type="button" id="join-room" value="加入房间"/>
+    <input type="button" id="leave-room" value="离开房间"/>
+</div>
+<div style="margin-top: 1em">待发送内容<input type="text" id="msg" value=""/>
+    <input type="button" id="send" value="发送"/>
+</div>
+<div style="max-width: 40em;margin:0;padding:0;"><h3>延迟:<span id="delay">0</span>ms</h3><textarea id="receive"
+                                                                                                  style="width: 40em; height: 30em;margin:0;padding:0;"></textarea>
+    <button id="clear" style="width: 40em;margin:0;padding:0;">clear</button>
+</div>
 </body>
-    <script src="{{CDN}}js/jquery.min.js"></script>
-    <script src="{{CDN}}js/socket.io.js"></script>
-    <script src="{{CDN}}js/index.js"></script>
+<script src="{{CDN}}js/jquery.min.js"></script>
+<script src="{{CDN}}js/common.js"></script>
+<script src="{{CDN}}js/socket.io.js"></script>
+<script src="{{CDN}}js/index.js"></script>
 </html>
