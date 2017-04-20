@@ -80,81 +80,59 @@ class SocketBase {
     };
 
     clients(room) {
-        return new Promise((resolve,reject)=>{
-            try{
-                let socketIds = [];
-                if (room) {
-                    let sockets = (this.io.sockets.adapter.rooms[room] || {}).sockets;
-                    if (sockets) {
-                        for (let socketId in sockets) {
-                            if (sockets.hasOwnProperty(socketId)) {
-                                socketIds.push(socketId);
-                            }
-                        }
-
+        let socketIds = [];
+        if (room) {
+            let sockets = (this.io.sockets.adapter.rooms[room] || {}).sockets;
+            if (sockets) {
+                for (let socketId in sockets) {
+                    if (sockets.hasOwnProperty(socketId) && sockets[socketId]) {
+                        socketIds.push(socketId);
                     }
-                    resolve(socketIds);
                 }
-                else {
-                    this.io.sockets.adapter.clients( (err, data)=> {
-                        if (!err) {
-                            socketIds = data;
 
-                        }
-                        resolve(socketIds);
-                    });
-                }
-            }catch(err){
-                reject(err);
             }
-        });
+        }
+        else {
+            let sids = this.io.sockets.adapter.sids;
+            for (let id in sids) {
+                if (sids.hasOwnProperty(id) && sids[id][id]) {
+                    socketIds.push(id);
+                }
+            }
+        }
+        return socketIds;
 
     };
 
     rooms(socketId) {
-        return new Promise((resolve,reject)=>{
-            try{
-                if(socketId){
-                    this.io.sockets.adapter.clientRooms(socketId,  (err, data)=> {
-                        if (!err) {
-                            let i = data.indexOf(socketId);
-                            if(i>-1){
-                                data.splice(i,1);
-                            }
-                            resolve(data);
-                        }else{
-                            resolve([]);
-                        }
-                    });
-                }else{
-                    let rooms = this.io.sockets.adapter.rooms;
-                    let results = [];
-                    for(let id in rooms){
-                        if(rooms.hasOwnProperty(id) && rooms[id]['sockets'] && !(rooms[id]['sockets'][id]) ){
-                            results.push(id);
-                        }
+        let roomIds = [];
+        if (socketId) {
+            let rooms = this.io.sockets.adapter.sids[socketId];
+            if (rooms) {
+                for (let id in rooms) {
+                    if (rooms.hasOwnProperty(id) && socketId != id) {
+                        roomIds.push(id);
                     }
-                    resolve(results);
                 }
-            }catch(err){
-                reject(err);
-            };
-        })
+            }
+
+        }
+        else {
+            let rooms = this.io.sockets.adapter.rooms;
+            if (rooms) {
+                for (let id in rooms) {
+                    if (rooms.hasOwnProperty(id) && undefined == (rooms[id].sockets[id])) {
+                        roomIds.push(id);
+                    }
+                }
+            }
+        }
+        return roomIds;
     };
 
     online(socketId, room) {
-        return new Promise((resolve,reject)=>{
-           try{
-               this.clients(room)
-               .then((results)=>{
-                   resolve(results.indexOf(socketId)>-1);
-               })
-           }catch(err){
-               reject(err);
-           }
-        });
 
-
+        return this.clients(room).indexOf(socketId) > -1;
 
     };
 
