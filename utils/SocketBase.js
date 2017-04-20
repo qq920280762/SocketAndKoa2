@@ -114,17 +114,28 @@ class SocketBase {
     rooms(socketId) {
         return new Promise((resolve,reject)=>{
             try{
-                this.io.sockets.adapter.clientRooms(socketId,  (err, data)=> {
-                    if (!err) {
-                        let i = data.indexOf(socketId);
-                        if(i>-1){
-                            data.splice(i,1);
+                if(socketId){
+                    this.io.sockets.adapter.clientRooms(socketId,  (err, data)=> {
+                        if (!err) {
+                            let i = data.indexOf(socketId);
+                            if(i>-1){
+                                data.splice(i,1);
+                            }
+                            resolve(data);
+                        }else{
+                            resolve([]);
                         }
-                        resolve(data);
-                    }else{
-                        resolve([]);
+                    });
+                }else{
+                    let rooms = this.io.sockets.adapter.rooms;
+                    let results = [];
+                    for(let id in rooms){
+                        if(rooms.hasOwnProperty(id) && rooms[id]['sockets'] && !(rooms[id]['sockets'][id]) ){
+                            results.push(id);
+                        }
                     }
-                });
+                    resolve(results);
+                }
             }catch(err){
                 reject(err);
             };

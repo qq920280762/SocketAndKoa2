@@ -73,10 +73,16 @@ class SocketServer extends SocketBase {
             });
 
             this.on('roomAll',socket.id,()=>{
+                let own = []
                 this.rooms(socket.id)
-                    .then((result)=>{
-                        this.emit('msgReceived', ' [ ' + socket.name + ' ] '+result.join(','),socket.id);
-                    });
+                    .then((r)=>{
+                        own = r;
+                        return this.rooms();
+                    })
+                    .then((all)=>{
+
+                        this.emit('msgReceived', ' [ ' + socket.name + ' ] 自己的房间: '+(own.length>0?own.join(','):'--')+';  所有的房间: '+(all.length>0?all.join(','):'--'),socket.id);
+                    })
             });
 
             this.on('roomLeave', socket.id, (data)=> {
