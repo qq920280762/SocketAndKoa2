@@ -32,6 +32,10 @@ class SocketServer extends SocketBase {
 
                     //console.log('packet =>'+JSON.stringify(packet));
 
+                    //console.log('rooms =>'+JSON.stringify(this.io.sockets.adapter.rooms));
+
+                    //console.log('sids =>'+JSON.stringify(this.io.sockets.adapter.sids));
+
                     if (packet[1].roomId) return next();
 
                     next(new Error('param error'));
@@ -58,11 +62,11 @@ class SocketServer extends SocketBase {
 
                     this.join(data.roomId, socket.id);
 
-                    this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => JOIN ROOM ' + data.roomId, data.roomId);
+                    this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => join room [' + data.roomId+']', data.roomId);
                 }
                 else {
 
-                    this.emit('msgReceived', ' [ ' + socket.name + ' ] => Repeat to join the room ' + data.roomId, socket.id);
+                    this.emit('msgReceived', ' [ ' + socket.name + ' ] => repeat to join the room [' + data.roomId+']', socket.id);
 
                 }
 
@@ -83,12 +87,12 @@ class SocketServer extends SocketBase {
 
                     this.leave(data.roomId, socket.id);
 
-                    this.emit('msgReceived',  ' [ ' + socket.name + ' ] => leave room '  + data.roomId, socket.id);
+                    this.emit('msgReceived',  ' [ ' + socket.name + ' ] => leave room ['  + data.roomId+']', socket.id);
 
-                    this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => leave room ' + data.roomId, data.roomId);
+                    this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => leave room [' + data.roomId+']', data.roomId);
                 }else{
 
-                    this.emit('msgReceived', ' [ ' + socket.name + ' ] => repeat to leave room ' + data.roomId, socket.id);
+                    this.emit('msgReceived', ' [ ' + socket.name + ' ] => you have not joined the room [' + data.roomId+']', socket.id);
                 }
 
 
