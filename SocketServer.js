@@ -12,7 +12,7 @@ class SocketServer extends SocketBase {
     init() {
 
         this.io.set('heartbeat interval', 5*1000);//心跳间隔
-        
+
         this.io.set('heartbeat timeout',5*1000);//心跳超时
 
         this.io.use((socket,next)=>{
@@ -79,9 +79,18 @@ class SocketServer extends SocketBase {
 
             this.on('roomLeave', socket.id, (data)=> {
 
-                this.leave(data.roomId, socket.id);
+                if (this.online(socket.id,data.roomId)) {
 
-                this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => LEAVE ROOM ' + data.roomId, data.roomId);
+                    this.leave(data.roomId, socket.id);
+
+                    this.emit('msgReceived',  ' [ ' + socket.name + ' ] => leave room '  + data.roomId, socket.id);
+
+                    this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => leave room ' + data.roomId, data.roomId);
+                }else{
+
+                    this.emit('msgReceived', ' [ ' + socket.name + ' ] => repeat to leave room ' + data.roomId, socket.id);
+                }
+
 
             });
 
