@@ -86,6 +86,11 @@ $.get('/socket/address', function (result) {
         socket.send(data);
     });
 
+    $('#rooms').click(function () {
+        var data = {roomId: $('#room').val(), msg: $('#msg').val()};
+        socket.emit('roomAll',data);
+    });
+
     $('#send').click(function () {
         if (!$('#msg').val().toString().trim()) {
             $('#receive').append("Please don't send empty content! \r\n");

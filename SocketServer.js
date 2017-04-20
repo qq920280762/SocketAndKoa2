@@ -24,10 +24,24 @@ class SocketServer extends SocketBase {
         this.connect((socket) => {
 
             socket.use((packet, next)=>{
-                console.log('lastPing=>'+socket.lastPing);
-                console.log('packet =>'+JSON.stringify(packet));
-                if (packet[1].roomId) return next();
-                next(new Error('param error'));
+                try {
+
+                    this.io.sockets.adapter.clientRooms(socket.id,function(err,data){
+
+                        console.log('socket online =>'+JSON.stringify(data));
+                    });
+                    this.io.sockets.adapter.clients(function(err,data){
+                        console.log('online socket array =>'+JSON.stringify(data));
+                    });
+
+                    console.log('rooms=>'+JSON.stringify(this.io.sockets.adapter.rooms));
+                    console.log('sids=>'+JSON.stringify(this.io.sockets.adapter.sids));
+                    console.log('packet =>'+JSON.stringify(packet));
+                    if (packet[1].roomId) return next();
+                    next(new Error('param error'));
+                }catch (e){
+                    next(e);
+                }
             });
 
             socket.name = randomNames.getRandomName();
@@ -41,18 +55,28 @@ class SocketServer extends SocketBase {
 
             this.on('roomJoin', socket.id, (data)=> {
 
-                if (!this.hasSocket(data.roomId, socket.id)) {
+                this.online(socket.id,data.roomId)
+                    .then((results)=>{
+                        if (!results) {
 
-                    this.join(data.roomId, socket.id);
+                            this.join(data.roomId, socket.id);
 
-                    this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => JOIN ROOM ' + data.roomId, data.roomId);
-                }
-                else {
+                            this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => JOIN ROOM ' + data.roomId, data.roomId);
+                        }
+                        else {
 
-                    this.emit('msgReceived', ' [ ' + socket.name + ' ] => Repeat to join the room ' + data.roomId, socket.id);
+                            this.emit('msgReceived', ' [ ' + socket.name + ' ] => Repeat to join the room ' + data.roomId, socket.id);
 
-                }
+                        }
+                    });
 
+            });
+
+            this.on('roomAll',socket.id,()=>{
+                this.rooms(socket.id)
+                    .then((result)=>{
+                        this.emit('msgReceived', ' [ ' + socket.name + ' ] '+result.join(','),socket.id);
+                    });
             });
 
             this.on('roomLeave', socket.id, (data)=> {

@@ -79,31 +79,71 @@ class SocketBase {
 
     };
 
-    getSockets(room) {
+    clients(room) {
+        return new Promise((resolve,reject)=>{
+            try{
+                let socketIds = [];
+                if (room) {
+                    let sockets = (this.io.sockets.adapter.rooms[room] || {}).sockets;
+                    if (sockets) {
+                        for (let socketId in sockets) {
+                            if (sockets.hasOwnProperty(socketId)) {
+                                socketIds.push(socketId);
+                            }
+                        }
 
-        return room ? this.io.sockets.adapter.rooms[room] : this.io.sockets.adapter.rooms;
+                    }
+                    resolve(socketIds);
+                }
+                else {
+                    this.io.sockets.adapter.clients( (err, data)=> {
+                        if (!err) {
+                            socketIds = data;
+
+                        }
+                        resolve(socketIds);
+                    });
+                }
+            }catch(err){
+                reject(err);
+            }
+        });
 
     };
 
-    hasSocket(room, socketId) {
+    rooms(socketId) {
+        return new Promise((resolve,reject)=>{
+            try{
+                this.io.sockets.adapter.clientRooms(socketId,  (err, data)=> {
+                    if (!err) {
+                        let i = data.indexOf(socketId);
+                        if(i>-1){
+                            data.splice(i,1);
+                        }
+                        resolve(data);
+                    }else{
+                        resolve([]);
+                    }
+                });
+            }catch(err){
+                reject(err);
+            };
+        })
+    };
 
-        let rooms = (this.getSockets(room) || {}).sockets || {};
+    online(socketId, room) {
+        return new Promise((resolve,reject)=>{
+           try{
+               this.clients(room)
+               .then((results)=>{
+                   resolve(results.indexOf(socketId)>-1);
+               })
+           }catch(err){
+               reject(err);
+           }
+        });
 
-        let flag  = false;
 
-        for (let key in rooms) {
-
-            if (socketId == key && !!rooms[key]) {
-
-                flag = true;
-
-                break;
-
-            }
-
-        }
-
-        return flag;
 
     };
 
