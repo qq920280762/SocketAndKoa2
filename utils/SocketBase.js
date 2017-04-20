@@ -93,10 +93,12 @@ class SocketBase {
             }
         }
         else {
-            let sids = this.io.sockets.adapter.sids;
-            for (let id in sids) {
-                if (sids.hasOwnProperty(id) && sids[id][id]) {
-                    socketIds.push(id);
+            let sockets = this.io.sockets.adapter.sids;
+            if(sockets){
+                for (let socketId in sockets) {
+                    if (sockets.hasOwnProperty(socketId) && sockets[socketId][socketId]) {
+                        socketIds.push(socketId);
+                    }
                 }
             }
         }
