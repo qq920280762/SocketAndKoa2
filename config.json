@@ -9,6 +9,13 @@
       "hostname":"10.0.0.115"
     }
   },
+  "db":{
+    "user":"",
+    "password":"",
+    "host":"127.0.0.1",
+    "port":"27017",
+    "database":"test"
+  },
   "session": {
     "key": "koa:sess",
     "useRedis": true,

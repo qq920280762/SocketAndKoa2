@@ -36,7 +36,7 @@ class SocketServer extends SocketBase {
 
                     //console.log('sids =>'+JSON.stringify(this.io.sockets.adapter.sids));
 
-                    if (packet[1].roomId) return next();
+                    if (packet[0]=='login' || packet[1].roomId) return next();
 
                     next(new Error('param error'));
 
@@ -45,9 +45,9 @@ class SocketServer extends SocketBase {
                 }
             });
 
-            socket.name = randomNames.getRandomName();
+//            socket.name = randomNames.getRandomName();
 
-            console.log('soket connection ['+socket.id+'] [ ' +socket.name + ' ]');
+            //console.log('soket connection ['+socket.id+'] [ ' +socket.name + ' ]');
 
             this.on('message', socket.id, (data)=> {
 
@@ -61,6 +61,8 @@ class SocketServer extends SocketBase {
                 if (!this.online(socket.id,data.roomId)) {
 
                     this.join(data.roomId, socket.id);
+
+                    socket.halls = this.rooms(socket.id);
 
                     this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => join room [' + data.roomId+']', data.roomId);
                 }
@@ -103,8 +105,21 @@ class SocketServer extends SocketBase {
                 this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => ' + data.msg, data.roomId);
 
             });
+
+            this.on('login', socket.id, (data)=> {
+                socket.name = data.userName;
+                socket.userId = data._id;
+                this.emit('msgReceived', socket.name+',login success ! ', socket.id);
+
+            });
             
             this.on('disconnect', socket.id, (obj) => {
+                let $this = this;
+                if(socket.halls){
+                    socket.halls.forEach((roomId)=>{
+                        $this.broadcast('msgReceived', ' [ ' + socket.name + ' ] => leave room [' + roomId+']', roomId);
+                    });
+                }
 
                 console.log('client active disconnect  [  ' + socket.id + ' ]' +obj);
 
