@@ -35,7 +35,6 @@ function init(){
         /* 重连成功 */
         socket.on('reconnect', function (obj) {
             $('#receive').append('reconnect : 重连成功! [ ' + socket.id + ' ] ' + obj + '\r\n');
-            socket.emit('login',user);
         });
 
         /* 重连失败 */
