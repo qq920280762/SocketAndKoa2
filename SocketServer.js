@@ -11,10 +11,6 @@ class SocketServer extends SocketBase {
 
     init() {
 
-        this.io.set('heartbeat interval', 5*1000);//心跳间隔
-
-        this.io.set('heartbeat timeout',5*1000);//心跳超时
-
         this.io.use((socket,next)=>{
 
             //console.log('headers =>' + JSON.stringify(socket.request.headers));
