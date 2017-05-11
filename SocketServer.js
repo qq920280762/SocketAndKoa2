@@ -2,6 +2,12 @@
 
 const randomNames = require('./utils/randomNames');
 const SocketBase = require('./utils/SocketBase');
+const Cache         = require('./utils/cache');
+//初始化自动缓存工具
+const autoCache = new Cache({
+    showUpdateLog: true,
+    store        : null //缺省值为内存 new Cache.RedisStore(config.cache)
+});
 
 class SocketServer extends SocketBase {
 

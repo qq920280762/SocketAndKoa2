@@ -2,11 +2,11 @@
   "server": {
     "http":{
       "port":"3000",
-      "hostname":"10.0.0.115"
+      "ip":"10.0.0.116"
     },
     "socket":{
       "port":"3001",
-      "hostname":"10.0.0.115"
+      "ip":"10.0.0.116"
     }
   },
   "db":{
@@ -27,6 +27,14 @@
       "family": 4,
       "db"  : 9
     }
+  },
+  "cache":{
+    "host": "127.0.0.1",
+    "port": 6379,
+    "opts": {
+      "auth_pass": "redispwd"
+    },
+    "db"  : 11
   },
   "CDN": "/"
 }

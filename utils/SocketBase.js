@@ -60,7 +60,8 @@ class SocketBase {
 
         if (roomId) {
 
-            this.io.to(roomId).emit(event, data);
+            //this.io.to(roomId).emit(event, data);
+            this.io.sockets.in(roomId).emit(event, data);
 
         }
         else {

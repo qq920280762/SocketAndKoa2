@@ -11,7 +11,7 @@ var server = http.createServer();
 
 var port = normalizePort(process.env.PORT || config.server.socket.port || '3001');
 
-server.listen(config.server.socket.port, config.server.socket.hostname);
+server.listen(config.server.socket.port, config.server.socket.ip);
 
 server.on('error', onError);
 
@@ -19,7 +19,7 @@ server.on('listening', onListening);
 
 new socket(server).init();
 
-console.info('http_socket started at ' + config.server.socket.hostname + ':' + config.server.socket.port);
+console.info('http_socket started at ' + config.server.socket.ip + ':' + config.server.socket.port);
 
 function normalizePort(val) {
     var port = parseInt(val, 10);

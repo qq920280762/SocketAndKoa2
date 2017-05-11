@@ -13,7 +13,7 @@ let get_index = async (ctx)=>{
 };
 
 let get_socket_address = async (ctx)=>{
-    ctx.body = 'http://'+config.server.socket.hostname+':'+config.server.socket.port;
+    ctx.body = 'http://'+config.server.socket.ip+':'+config.server.socket.port;
 };
 
 router.get('/socket/address',get_socket_address);
