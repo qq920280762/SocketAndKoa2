@@ -2,12 +2,12 @@ function init(){
     $.get('/socket/address', function (result) {
 
         var socket = new io.connect(result, {
-            autoConnect         : true,
-            timeout             : 5000,
-            reconnection        : true,
-            reconnectionAttempts: 3,
-            reconnectionDelay   : 1 * 1000,
-            reconnectionDelayMax: 5 * 1000
+            autoConnect         : true,//自动连接
+            timeout             : 5000,//连接超时
+            reconnection        : true,//断开后自动重连
+            reconnectionAttempts: 3,//重连次数
+            reconnectionDelay   : 1 * 1000,//重连延迟
+            reconnectionDelayMax: 5 * 1000//重连最大延迟
         });
 
 
