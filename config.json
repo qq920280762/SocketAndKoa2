@@ -2,11 +2,11 @@
   "server": {
     "http":{
       "port":"3000",
-      "ip":"10.0.0.116"
+      "ip":"127.0.0.1"
     },
     "socket":{
       "port":"3001",
-      "ip":"10.0.0.116"
+      "ip":"127.0.0.1"
     }
   },
   "db":{
@@ -21,9 +21,9 @@
     "useRedis": true,
     "server"  : {
       "keyPrefix":"",
-      "host": "114.55.66.147",
+      "host": "127.0.0.1",
       "port": 6379,
-      "password": "test1231",
+      "password": "123456",
       "family": 4,
       "db"  : 9
     }
@@ -32,7 +32,7 @@
     "host": "127.0.0.1",
     "port": 6379,
     "opts": {
-      "auth_pass": "redispwd"
+      "auth_pass": "123456"
     },
     "db"  : 11
   },
