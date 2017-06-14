@@ -3,11 +3,11 @@ const ObjectID = require('mongodb').ObjectID;
 const config = require('../config');
 
 const mongoLink = 'mongodb://'+
-    config.db.user+':'+
-    config.db.password+'@'+
-    config.db.host+':'+
-    config.db.port+'/'+
-    config.db.database;
+    config.mongodb.user+':'+
+    config.mongodb.password+'@'+
+    config.mongodb.host+':'+
+    config.mongodb.port+'/'+
+    config.mongodb.database;
 
 class BaseOrm {
 

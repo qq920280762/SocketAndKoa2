@@ -85,6 +85,7 @@ class SocketBase {
     };
 
     clients(room) {
+        //判断是否正常连接 socket.connected==true
         let socketIds = [];
         if (room) {
             let sockets = (this.io.sockets.adapter.rooms[room] || {}).sockets;
